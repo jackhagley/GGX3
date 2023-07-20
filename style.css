@@ -1,21 +1,58 @@
-#workspace {
-    width: 100%;
-    height: 100vh;
-    position: relative;
-    overflow: auto;
-  }
-  
-.node {
-    position: absolute;
-    background-color: #f1f1f1;
-    padding: 10px;
-    cursor: move;
-  }
+:root {
+  /* Only use colours when there is no other way to show something */
 
-  .connection {
-    position: absolute;
-    height: 2px;
-    background-color: black;
-    pointer-events: none; /* Prevent connections from interfering with node drag events */
+  /* nodeSpace */
+  --nodeSpace-bg: #565656;
+  --nodeSpace-text: #ebebeb;
+
+  /* workSpace */
+  --workSpace-bg: #ebebeb;
+  --workSpace-text: #565656;
+}
+
+/* Main CSS */
+body{
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+/* Main Container */
+
+#main-container {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  overflow: hidden;
+}
+
+#main-container.cols
+{
+  grid-template-columns: repeat(2, minmax(50%, 1fr));
+}
+
+#main-container.rows
+{
+  grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
+}
+
+@media (max-width: 768px) {
+  #main-container {
+    grid-template-columns: 1fr; /* Display divs as one column when the window is narrower */
   }
-  
+}
+
+/* Spaces */
+
+.space {
+  padding: 20px;
+  text-align: center;
+}
+
+.nodeSpace {
+  background-color: var(--nodeSpace-bg);
+  color: var(--nodeSpace-text)
+}
+
+.workSpace {
+  background-color: var(--workSpace-bg);
+  color: var(--workSpace-text);
+}

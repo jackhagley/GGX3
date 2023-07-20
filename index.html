@@ -3,32 +3,40 @@
 
 <!-- ///////////////// -->
 <head>
-<!-- /////////////////    -->
+
+<!-- Fonts and Styles -->
+<link rel="stylesheet" href="reset.css">
 <link rel="stylesheet" href="style.css">
+<!-- Google Fonts API -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
 
+<!-- Scripts -->
+<script src="ggx-node.js"></script>
+<!-- <script src="ggx-interaction.js"></script> -->
+<script src="ggx-space.js"></script>
+<script src="init.js"></script>
 
-
-<!-- ///////////////// -->
 </head>
 <!-- ///////////////// -->
-
+<!-- ///////////////// -->
 <!-- ///////////////// -->
 <body>
-<!-- ///////////////// -->
-
-<script src="ggx-node.js"></script> 
-<script src="ggx-interaction.js"></script>
-<script src="ggx-space.js"></script> 
-
-<div id="workspace">
-    <div id="node1" class="node">Node 1</div>
-    <div id="node2" class="node">Node 2</div>
-    
-  </div>
-   
+<div id="main-container" class="cols">
+  <div id="nodeSpace_l0" class="l0 space nodeSpace">nodeSpace</div>
+  <div id="workSpace_l0" class="l0 space workSpace">workSpace</div>
+</div>
 
 
-<!-- ///////////////// -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    init();
+  });
+</script>
+
 </body>
+
 <!-- ///////////////// -->
 </html>

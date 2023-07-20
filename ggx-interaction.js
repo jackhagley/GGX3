@@ -34,3 +34,31 @@ function handleMouseUp() {
     selectedNode = null;
   }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const div1 = document.getElementById('div1');
+  const div2 = document.getElementById('div2');
+
+  // Set initial styles
+  div1.style.width = '50%';
+  div2.style.width = '50%';
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === '1') {
+      div1.classList.remove('hidden');
+      div2.classList.add('hidden');
+      div1.style.width = '100%';
+      div2.style.width = '0';
+    } else if (event.key === '3') {
+      div1.classList.add('hidden');
+      div2.classList.remove('hidden');
+      div1.style.width = '0';
+      div2.style.width = '100%';
+    } else if (event.key === '2') {
+      div1.classList.remove('hidden');
+      div2.classList.remove('hidden');
+      div1.style.width = '50%';
+      div2.style.width = '50%';
+    }
+  });
+});
