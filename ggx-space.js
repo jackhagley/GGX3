@@ -1,7 +1,9 @@
+
+
 class Space {
     constructor(containerElement) {
       this.containerElement = containerElement;
-      this.nodes = [];
+      this.draggables = [];
       this.gridSize = 20;
       this.scale = 1;
       this.offset = { x: 0, y: 0 };
@@ -15,9 +17,13 @@ class Space {
       this.containerElement.addEventListener('wheel', this.handleMouseWheel.bind(this));
     }
 
-    addNode(node) {
-      this.nodes.push(node);
-      this.containerElement.appendChild(node.element);
+    addDraggable(d) {
+      this.draggables.push(d);
+      this.containerElement.appendChild(d.element);
+    }
+
+    getContainerRect() {
+      return this.containerElement.getBoundingClientRect();
     }
   
     handleMouseDown(event) {
@@ -34,5 +40,18 @@ class Space {
   
     handleMouseWheel(event) {
       // handle zoom here
+    }
+  }
+
+  class NodeSpace extends Space {
+    constructor(containerElement) {
+      // Call the parent class constructor using super()
+      super(containerElement);
+      
+
+
+      ///test stuff
+      
+      
     }
   }
