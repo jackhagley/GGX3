@@ -10,9 +10,6 @@ class Draggable {
       this.element.style.position = 'absolute';
       this.element.style.left = '50px';
       this.element.style.top = '50px';
-      this.element.style.width = '50px';
-      this.element.style.height = '50px';
-      this.element.style.backgroundColor = 'blue';
       this.element.style.cursor = 'grab';
   
       this.offsetX = 0;
