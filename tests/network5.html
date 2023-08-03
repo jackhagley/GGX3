@@ -1,0 +1,78 @@
+<!-- How to adapt ObservableHQ  -->
+
+<div id="chart"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+  // Constants for chart dimensions and data generation
+  const width = 1000;
+  const height = 500;
+  const radius = 6;
+  const step = radius * 2;
+  const theta = Math.PI * (3 - Math.sqrt(5));
+
+  // Generate data for the chart, creating an array of objects with x and y coordinates
+  const data = Array.from({length: 2000}, (_, i) => {
+    const radius = step * Math.sqrt(i += 0.5);
+    const a = theta * i;
+    return {
+      x: width / 2 + radius * Math.cos(a),
+      y: height / 2 + radius * Math.sin(a)
+    };
+  });
+
+  // Create the SVG container with the specified viewBox
+  const svg = d3.create("svg")
+    .attr("viewBox", [0, 0, width, height]);
+
+  // Append a <g> element to the SVG to group elements together and set cursor style
+  const main_group = svg.append("g")
+    .attr("cursor", "grab");
+
+  // Bind data to circles and create circles for each data point
+  main_group.selectAll("circle")
+    .data(data)
+    .join("circle")
+    .attr("cx", ({x}) => x)
+    .attr("cy", ({y}) => y)
+    .attr("r", radius)
+    .attr("fill", (d, i) => d3.interpolateRainbow(i / 360))
+    .call(d3.drag()
+      .on("start", dragstarted) // Call dragstarted function on drag start
+      .on("drag", dragged) // Call dragged function on drag
+      .on("end", dragended)); // Call dragended function on drag end
+
+  // Enable zoom behavior on the SVG container
+  svg.call(d3.zoom()
+    .extent([[0, 0], [width, height]])
+    .scaleExtent([1, 8])
+    .on("zoom", zoomed)); // Call zoomed function on zoom event
+
+  // Function called when dragging of a circle starts
+  function dragstarted() {
+    d3.select(this).raise(); // Bring the dragged circle to the front
+    main_group.attr("cursor", "grabbing"); // Change cursor style during drag
+  }
+
+  // Function called when dragging a circle
+  function dragged(event, d) {
+    d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
+    // Update the circle's position (d.x and d.y) with the current drag event position (event.x and event.y)
+  }
+
+  // Function called when dragging of a circle ends
+  function dragended() {
+    main_group.attr("cursor", "grab"); // Change cursor style back to default after drag ends
+  }
+
+  // Function called on zoom event
+  function zoomed({transform}) {
+    main_group.attr("transform", transform);
+    // Apply the current zoom transformation to the <g> element to zoom in and out
+  }
+
+  // Append the SVG to the chart container
+  const chartContainer = d3.select("#chart");
+  chartContainer.node().appendChild(svg.node());
+
+</script>
