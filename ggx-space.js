@@ -1,4 +1,8 @@
-// ggx-space.js
+function generateUniqueId(prefix) {
+    const timestamp = Date.now().toString(36);
+    const randomString = Math.random().toString(36).substr(2, 8); // 8 characters long
+    return `${prefix}-${timestamp}-${randomString}`;
+}
 
 class Node {
   constructor(x, y, radius) {
@@ -8,19 +12,7 @@ class Node {
     this.radius = radius;
   }
 
-  generateRandomId() {
-    const idLength = 8;
-    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let id = '';
 
-    while (id.length < idLength) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      const randomCharacter = characters[randomIndex];
-      id += randomCharacter;
-    }
-
-    return id;
-  }
 }
 
 class Space {
