@@ -4,11 +4,11 @@ function generateUniqueId(prefix) {
     return `${prefix}-${timestamp}-${randomString}`;
 }
 
-class Node {
+class ggx_Node {
     constructor() {
       this.id = generateUniqueId('node');
       this.width = 100;
-      this.height = 100;
+      this.height = 66;
       this.x = 20;
       this.y = 30;
       this.color = 'black';
@@ -19,7 +19,7 @@ class Node {
       this.fy;
     }
   
-    create(container) {
+    init(container) {
       this.svg = container
         .append('rect')
         .attr('id', this.id)
@@ -91,8 +91,14 @@ class NodeSpace {
         .style('fill', 'white').style('font-size', '10px')
         .text(`Depth: ${depth}`);
         
-        const node = new Node();
-        node.create(this.svg); // Add the Node to the NodeSpace's SVG container
+        this.addNode();//test 
+    }
+
+    addNode()
+    {
+        const node = new ggx_Draggable();
+        node.init(this.svg); // Add the Node to the NodeSpace's SVG container
+
     }
 
 

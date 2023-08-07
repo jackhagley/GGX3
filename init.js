@@ -1,32 +1,40 @@
-//global arrays
-const nodeSpaces = [];
-const workSpaces = [];
+const nodeSpaceHierarchy = new NodeSpaceHierarchy();
+// const eventDelegator = new EventDelegator(nodeSpaceHierarchy);
 
-let nodeSpace_l0;
-let workSpace_l0;
+const rootNodeSpaceData = {}; // Data for the root NodeSpace
+const rootNodeSpace = new NodeSpace('root', rootNodeSpaceData);
+const rootWorkSpace = new WorkSpace('root', rootNodeSpaceData);
 
-function init() {
-  console.log("Init Started");
-
-  // Initialize nodeSpace_l0
-  addNodeSpace(true);//
-}
-
-function addNodeSpace(first=false)
+// Create and set up SVG for the entire NodeSpace hierarchy
+function init()
 {
-  if(first)//the base level. Level 0
-  {
-    nodeSpace_l0 = new NodeSpace(document.getElementById('nodeSpace_l0'));
-    nodeSpaces.push(nodeSpace_l0);
 
+    ///Set up the root NodeSpace
+    // ns_container = d3.select('#nodeSpace_container');
+    rootNodeSpace.create(d3.select('#nodeSpace_container'));
+
+    // Set the root NodeSpace as the active NodeSpace initially
+    nodeSpaceHierarchy.setActiveNodeSpace(rootNodeSpace);
+
+
+    rootWorkSpace.create(d3.select('#workSpace_container'));
+    nodeSpaceHierarchy.setActiveWorkSpace(rootNodeSpace);
+
+
+
+
+        ///Set up the root WorkSpace
+        // const container = d3.select('#nodeSpace_container');
+        // rootNodeSpace.create(container);
     
-    console.log("L0 nodeSpace added");
+        // // Set the root NodeSpace as the active NodeSpace initially
+        // nodeSpaceHierarchy.setActiveNodeSpace(rootNodeSpace);
 
-    ///add it to the global node
-    
 
-    // nodeSpace_l0.addNode()
-  }
+// eventDelegator.setActiveNodeSpace(rootNodeSpace);
 
-  
+// Handle events
+// document.addEventListener('click', event => {
+//     eventDelegator.handleEvent(event);
+// });
 }
