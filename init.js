@@ -2,8 +2,10 @@ const nodeSpaceHierarchy = new NodeSpaceHierarchy();
 // const eventDelegator = new EventDelegator(nodeSpaceHierarchy);
 
 const rootNodeSpaceData = {}; // Data for the root NodeSpace
+const rootWorkSpaceData = {}; // Data for the root NodeSpace
+
 const rootNodeSpace = new NodeSpace('root', rootNodeSpaceData);
-const rootWorkSpace = new WorkSpace('root', rootNodeSpaceData);
+const rootWorkSpace = new WorkSpace('root', rootWorkSpaceData);
 
 // Create and set up SVG for the entire NodeSpace hierarchy
 function init()
@@ -21,20 +23,5 @@ function init()
     nodeSpaceHierarchy.setActiveWorkSpace(rootNodeSpace);
 
 
-
-
-        ///Set up the root WorkSpace
-        // const container = d3.select('#nodeSpace_container');
-        // rootNodeSpace.create(container);
-    
-        // // Set the root NodeSpace as the active NodeSpace initially
-        // nodeSpaceHierarchy.setActiveNodeSpace(rootNodeSpace);
-
-
-// eventDelegator.setActiveNodeSpace(rootNodeSpace);
-
-// Handle events
-// document.addEventListener('click', event => {
-//     eventDelegator.handleEvent(event);
-// });
+    rootNodeSpace.addPortable();//test 
 }

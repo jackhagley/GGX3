@@ -7,7 +7,7 @@ function generateUniqueId(prefix) {
 class ggx_Draggable {
   /// base class for any draggable object that resides in a Space
   constructor() {
-    this.id = generateUniqueId('node');
+    this.id = generateUniqueId('drag');
     this.width = 100;
     this.height = 66;
     this.x = 20;
@@ -18,19 +18,24 @@ class ggx_Draggable {
     this.dragStart = null;
     this.fx;
     this.fy;
+
+    this.main_group = null;///main group
   }
 
   init(container) {
-    this.svg = container
-      .append('rect')
-      .attr('id', this.id)
-      .attr('width', this.width)
-      .attr('height', this.height)
-      .attr('x', this.x)
-      .attr('y', this.y)
-      .style('fill', this.color);
-      /// add interatives
-      this.svg.call(
+    ///main group
+    this.main_group = container.append("g")
+    .attr("id", this.id + "-group")//? maybe keep
+    
+    // Append the rectangle to the group
+    this.body = this.main_group.append("rect")
+    .attr("id", this.id)
+    .attr("width", this.width)
+    .attr("height", this.height)
+    .style("fill", this.color);
+
+      /// add interactives
+      this.body.call(
       d3
           .drag()
           .on("start", (event, d) => this.dragstarted(event, d))
@@ -38,23 +43,22 @@ class ggx_Draggable {
           .on("end", (event, d) => this.dragended(event, d))
       );
 
-    this.update();
+    this.updatePosition();
+
   }
 
   dragstarted(event) {
-    this.svg.raise();
+    ///bring it to the top of the stack
+    this.main_group.raise();
     //set the offset
-    this.fx = this.svg.attr("x") - d3.pointer(event, this)[0];
-    this.fy = this.svg.attr("y") - d3.pointer(event, this)[1];
+    this.fx = this.x - d3.pointer(event, this)[0];
+    this.fy = this.y - d3.pointer(event, this)[1];
+  }
 
-    }
-  
-  dragged(event) {   
-      this.svg
-      ///update position
-      .attr("x", parseInt(this.fx) + parseInt(d3.pointer(event, this)[0]) )
-      .attr("y", parseInt(this.fy) + parseInt(d3.pointer(event, this)[1]) ) ;
-
+  dragged(event) {
+    this.x = parseInt(this.fx) + parseInt(d3.pointer(event, this)[0]);
+    this.y = parseInt(this.fy) + parseInt(d3.pointer(event, this)[1])
+    this.updatePosition();
     }
   
   dragended(event) {
@@ -63,10 +67,126 @@ class ggx_Draggable {
       this.fy = 0;
     }
 
-  update() {
-    // Update the Node's appearance based on hover state
-    this.svg.style('cursor', this.isHovered ? 'pointer' : 'default');
+  updatePosition() {
+    //this gets called on drag
+    this.main_group.attr("transform", `translate(${this.x},${this.y})`);
   }
+}
+
+class ggx_Port
+{
+  
+  constructor(draggable)
+  {
+    ///add Ports to a draggable
+    this.draggable = draggable;
+    this.connectedTo = null;
+    this.id = generateUniqueId('port');
+    this.value = null; // this is what it passes on
+
+  }
+
+  init(container) {
+    
+
+    container
+      .append("circle")
+      .attr("cx", this.width/2)
+      .attr("cy", this.height)
+      .attr("class", "port")
+      .attr("r", 10)
+      .style("fill", "green")
+      .call(d3.drag()
+        .on("start", (event, d) => this.dragPortStart(event, d))
+        .on("drag", (event, d) => this.dragPort(event, d))
+        .on("end", (event, d) => this.dragPortEnd(event, d))
+      );
+  }
+
+  dragPortStart()
+  {
+  
+  }
+
+  dragPort()
+  {
+  
+  }
+
+  dragPortEnd()
+  {
+  
+  }
+
+
+}
+
+class InPort extends ggx_Port
+{
+  constructor(draggable)
+  {
+    super(draggable)
+  }
+
+  init(container)
+  {
+    super.init(container);
+  }
+
+}
+
+// class OutPort extends ggx_Port
+// {
+//   constructor(dragg)
+//   {
+//     super()
+//   } 
+
+//   init()
+//     {
+//       super.init();
+//     }
+// }
+
+
+class ggx_Portable extends ggx_Draggable
+{
+  ///Portable is a Draggable with Ports
+  ///Portable is a Node without functions
+  
+  constructor() {
+    super();
+    this.inPorts = []; // InPort Array
+    ///don’t try to build anything into 
+    ///svg until init is run!
+
+
+    
+  }
+
+  init(container)
+  {
+    super.init(container);
+
+    this.id = generateUniqueId('portable');
+    this.body.style("fill", "snow");
+    this.ports = this.main_group.append("g");
+    this.addInPort();  // add InPort Test
+    this.updatePosition();
+  }
+
+  addInPort()
+  {
+    var inPort = new InPort(this.main_group)
+    inPort.init(this.ports)
+  }
+
+  updatePosition()
+  {
+    super.updatePosition()
+
+  }
+
 }
 
 class NodeSpaceHierarchy {
@@ -127,14 +247,18 @@ class Space{
   addDraggable()
   {
       const draggable = new ggx_Draggable();
-      draggable.init(this.svg); // 
+      draggable.init(this.svg); //
+      ///add to array TODO 
 
   }
+
+ 
+
 }
 
 class NodeSpace extends Space{
   constructor() {
-    super()
+     super()
       this.id = generateUniqueId('ns'); // generate a unique one with prefix 'ns'
       // this.data = data; // NodeSpace data
       this.children = []; // Array to hold child NodeSpaces
@@ -142,6 +266,14 @@ class NodeSpace extends Space{
       // console.log(this.id)
       
       // this.nodeColour = var("--nodeSpace-draggable"); TODO
+      
+  }
+
+  addPortable()
+  {
+    var portable = new ggx_Portable();
+    portable.init(this.svg); // 
+    ///add to array TODO
   }
 
   addChild(childNodeSpaceData) {
@@ -168,6 +300,6 @@ class WorkSpace extends Space{
   constructor()
   {
 super()
-
+    
   }
 }
